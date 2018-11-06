@@ -1,0 +1,8 @@
+temp/*
+!temp/.keep
+PBLoader_Linux/Launcher
+PBLoader_Linux/PBLoader.so
+PBLoader_Windows/Launcher.exe
+PBLoader_Windows/PBLoader.dll
+PBLoader_Linux.7z
+PBLoader_Windows.7z
