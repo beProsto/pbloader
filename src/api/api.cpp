@@ -1,4 +1,4 @@
-#include "../include/api.hpp"
+#include <api/api.hpp>
 
 int API::GetXLoc() {
 	int* ptr = (int*)0x00541118;
@@ -46,12 +46,6 @@ void API::SetYPos(float val) {
 
 void API::Shoot() {
 	uint8_t* ptr = (uint8_t*)0x00542460;
-	*ptr = 1;
-}
-
-void API::Jump(int height) {
-	// TODO: Sprawdzić w jaki sposób skskać wyżej
-	uint8_t* ptr = (uint8_t*)0x00542461;
 	*ptr = 1;
 }
 
@@ -146,37 +140,3 @@ void API::SetShadow(int x, int y, bool state) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-void API::OpenConsole() {
-	AllocConsole();
-
-	HANDLE handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
-	int hCrt = _open_osfhandle((long)handle_out, _O_TEXT);
-	FILE* hf_out = _fdopen(hCrt, "w");
-	setvbuf(hf_out, NULL, _IONBF, 1);
-	*stdout = *hf_out;
-
-	HANDLE handle_in = GetStdHandle(STD_INPUT_HANDLE);
-	hCrt = _open_osfhandle((long)handle_in, _O_TEXT);
-	FILE* hf_in = _fdopen(hCrt, "r");
-	setvbuf(hf_in, NULL, _IONBF, 128);
-	*stdin = *hf_in;
-}
-
-void API::CloseConsole() {
-	FreeConsole();
-
-	FILE* nulf = NULL;
-	*stdout = *nulf;
-	*stdin = *nulf;
-}
-
-void API::SetTitle(const wchar_t* title) {
-	HWND handle = Internal::GetHWND();
-	SetWindowTextW(handle, title);
-}
-
-int API::MsgBox(const wchar_t* title, const wchar_t* content, uint32_t flags) {
-	HWND handle = Internal::GetHWND();
-	return MessageBoxW(handle, content, title, flags);
-}

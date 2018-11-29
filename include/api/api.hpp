@@ -7,7 +7,7 @@
 #include <cmath>
 #include <fcntl.h>
 
-#include "../include/internal.hpp"
+#include <internal.hpp>
 
 #define MAP_WIDTH  32
 #define MAP_HEIGHT 18
@@ -34,7 +34,6 @@ namespace API {
 	void SetYPos(float val);
 
 	void Shoot();
-	void Jump(int height = 1);
 	void Respawn();
 
 	int GetDeathCount();
@@ -51,11 +50,6 @@ namespace API {
 	void RemoveShadow(int x, int y);
 	void SetShadow(int x, int y, bool state);
 
-	void OpenConsole();
-	void CloseConsole();
-	void SetTitle(const wchar_t* title);
-	int MsgBox(const wchar_t* title, const wchar_t* content, uint32_t flags);
-	
 }
 
 #endif
