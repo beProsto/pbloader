@@ -1,23 +1,21 @@
 #include <windows.h>
-#include <stdint.h>
-#include <fcntl.h>
+#include <cstdio>
 
-#include <SDL2/SDL.h>
+#include "../include/api.hpp"
+#include "../include/internal.hpp"
 
-DWORD WINAPI Main(LPVOID);
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+DWORD WINAPI Main(LPVOID param);
 
-bool* quit;
+bool quit;
 HANDLE thread;
 
 BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason, LPVOID reserved) {
 	switch(reason) {
 		case DLL_PROCESS_ATTACH:
-			thread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&Main, NULL, NULL, NULL);
-			//MessageBoxA(0, "DLL_PROCESS_ATTACH", "DLL_PROCESS_ATTACH", MB_ICONINFORMATION | MB_OKCANCEL);
+			thread = CreateThread(NULL, 0, Main, &quit, 0, NULL);
 			break;
 		case DLL_PROCESS_DETACH:
-			//MessageBoxA(0, "DLL_PROCESS_DETACH", "DLL_PROCESS_DETACH", MB_ICONINFORMATION | MB_OKCANCEL);
+			quit = true;
 			break;
 	}
 	return TRUE;
@@ -27,41 +25,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch(msg) {
 		case WM_CLOSE:
 		case WM_DESTROY:
-			*quit = true;
+			quit = true;
 			break;
 	}
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-DWORD WINAPI Main(LPVOID) {
-	/*
-	uint16_t* ptr = (uint16_t*)0x00541DC0;
-	while(ptr<(uint16_t*)0x0054223E) {
-		*ptr = 0x01;
-		ptr += 0x00000001;
-	}
-	return 0;
-	*/
+DWORD WINAPI Main(LPVOID param) {
+	bool* quit = (bool*)param;
 
-	// I cyk otwieramy konsolke
-	AllocConsole();
+	API::SetTitle(L"Perypetie Boba (with Mod Loader v1.0)");
+	API::OpenConsole();
 
-	HANDLE handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
-	int hCrt = _open_osfhandle((long)handle_out, _O_TEXT);
-	FILE* hf_out = _fdopen(hCrt, "w");
-	setvbuf(hf_out, NULL, _IONBF, 1);
-	*stdout = *hf_out;
+	HWND window = Internal::GetHWND();
+	SetWindowLong(window, GWL_WNDPROC, (LONG)&WndProc);
 
-	HANDLE handle_in = GetStdHandle(STD_INPUT_HANDLE);
-	hCrt = _open_osfhandle((long)handle_in, _O_TEXT);
-	FILE* hf_in = _fdopen(hCrt, "r");
-	setvbuf(hf_in, NULL, _IONBF, 128);
-	*stdin = *hf_in;
-
-	HWND game = FindWindow(NULL, "Perypetie Boba");
-	SetWindowLong(game, GWL_WNDPROC, (LONG)&WndProc);
-
-	/* Psuje okno, bez sensu używać
+	/* Psuje okno
 	HMENU menu = CreateMenu();
 	MENUITEMINFO menuInfo;
 	ZeroMemory(&menuInfo, sizeof(menuInfo));
@@ -74,19 +53,52 @@ DWORD WINAPI Main(LPVOID) {
 	SetMenu(game, menu);
 	*/
 
-	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window* window = SDL_CreateWindowFrom(game);
-	SDL_SetWindowTitle(window, "Perypetie Boba (with PB Mod Loader v1.0)");
-	SDL_Surface* surface = SDL_GetWindowSurface(window);
+	bool started = false;
+
+	int lx, ly;
+	int lxLast = 0;
+	int lyLast = 0;
+
+	float px, py;
+	float pxLast = 0.0;
+	float pyLast = 0.0;
 
 	while(!*quit) {
-		SDL_FillRect(surface, &surface->clip_rect, 0x0000ffff);
-		SDL_UpdateWindowSurface(window);
-		printf("cyk\n");
+		lx = API::GetXLoc();
+		ly = API::GetYLoc();
+		if(lx != lxLast || ly != lyLast) {
+			if(!started) {
+				API::SetDeathCount(2136);
+				printf("Death Count: %i\n", API::GetDeathCount());
+
+				Sleep(3000);
+				API::Respawn();
+
+				started = true;
+			}
+
+			lxLast = lx;
+			lyLast = ly;
+			printf("Location: %i, %i\n", lx, ly);
+
+			API::PlaceBlock(2, 2, 1);
+
+			Sleep(500);
+
+			API::Jump();
+			API::Shoot();
+		}
+
+		if(started) {
+			px = API::GetXPos();
+			py = API::GetYPos();
+			if(px != pxLast || py != pyLast) {
+				pxLast = px;
+				pyLast = py;
+				printf("Location: %i, %i | Position: %.2f, %.2f\n", lx, ly, px, py);
+			}
+		}
 	}
 
-	SDL_FreeSurface(surface);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
 	return 0;
 }

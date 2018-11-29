@@ -4,7 +4,7 @@ TMP = ./temp
 WIN_BD = $(NAME)_Windows
 WIN_TMP = temp
 CR = g++
-CRFLAGS = -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-write-strings -std=c++14
+CRFLAGS = -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-write-strings -std=c++11
 LRFLAGS = 
 LRLIBS = -lSDL2
 ATTR = 
@@ -44,8 +44,8 @@ endif
 
 all: info clean compile
 
-compile: main
-	$(CR) $(LRFLAGS) -shared "$(TMP)/main.o" $(LRLIBS) -o "$(BD)/$(NAME).$(EXT)"
+compile: main api internal
+	$(CR) $(LRFLAGS) -shared "$(TMP)/main.o" "$(TMP)/api.o" "$(TMP)/internal.o" $(LRLIBS) -o "$(BD)/$(NAME).$(EXT)"
 
 launcher:
 	$(CR) $(CRFLAGS) -mwindows "$(SRC)/launcher.cpp" -o "$(BD)/Launcher"
@@ -64,3 +64,9 @@ run test:
 
 main:
 	$(CR) $(CRFLAGS) "$(SRC)/main.cpp" -c -o "$(TMP)/main.o"
+
+api:
+	$(CR) $(CRFLAGS) "$(SRC)/api.cpp" -c -o "$(TMP)/api.o"
+
+internal:
+	$(CR) $(CRFLAGS) "$(SRC)/internal.cpp" -c -o "$(TMP)/internal.o"

@@ -10,10 +10,10 @@ int main(int argc, char* argv[]) {
 	bool inject = false;
 
 	for(int i = 1; i < argc; i++) {
-		if(strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0) {
+		if(!strcmp(argv[i], "--help") || !strcmp(argv[i], "-h")) {
 			MessageBoxW(NULL, L"-h    --help    Wyśwetla pomoc\n-i    --inject    Wpina się do istniejącego okna gry", L"PB Loader", MB_OK);
 			return 0;
-		} else if((strcmp(argv[i], "--inject") == 0 || strcmp(argv[i], "-i") == 0) && !inject) {
+		} else if((!strcmp(argv[i], "--inject") || !strcmp(argv[i], "-i")) && !inject) {
 			inject = true;
 		}
 	}
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 
 		if(FileExists(path)) {
 			if(!InjectDLL(pid, path)) {
-				DisplayError(L"Nie można wczytać Mod Loadera\nSpróbuj uruchomić Launcher jako administrator\nJeżeli to nie pomoże skontaktuj się z deweloperem");
+				DisplayError(L"Nie można wczytać Mod Loadera\nSpróbuj wykonać następujące czynności:\n    - Upewnij się, czy gra jest włączona\n    - Ponownie uruchom grę\n    - Uruchom launcher jako adminstrator\nJeżeli to nie pomoże skontaktuj się z deweloperem");
 				return 1;
 			}
 		} else {
