@@ -22,6 +22,7 @@
 #define SHADOWS_END   0x005414BF
 
 namespace API {
+	
 	int GetXLoc();
 	int GetYLoc();
 	void SetXLoc(int val);
@@ -54,6 +55,7 @@ namespace API {
 	void CloseConsole();
 	void SetTitle(const wchar_t* title);
 	int MsgBox(const wchar_t* title, const wchar_t* content, uint32_t flags);
+	
 }
 
 #endif
