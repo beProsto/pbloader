@@ -20,7 +20,7 @@ add_library(pbloader SHARED ${source}/main.cpp
                             ${source}/launcher.cpp
                             ${source}/api/api.cpp
                             ${source}/hooks/hook.cpp
-                            ${source}/hde32/hde32.cpp)
+                            ${source}/hde32/hde32.cpp src/api/render.cpp)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
-target_link_libraries(pbloader SDL2)
+target_link_libraries(pbloader SDL2 SDL2_mixer)
