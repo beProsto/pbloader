@@ -11,9 +11,7 @@
 #include <SDL2/SDL_image.h>
 
 namespace Render {
-    SDL_Texture* LoadTexture(const std::string& path);
 
-    void Draw(SDL_Texture* texture, const SDL_Rect* pos);
 }
 
 #endif //PBLOADER_RENDER_HPP
