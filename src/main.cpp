@@ -6,6 +6,8 @@
 #include <detours/detours.h>
 #include <hooks/hook.hpp>
 
+#include <logger.hpp>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -37,6 +39,9 @@ DWORD WINAPI Main(LPVOID) {
         return FALSE;
     }
 
+    logInfo("info",1);
+    logError("err",2);
+    logWarn("warn",3);
 
     sprite = new Sprite(Vector2f(0, 0), Vector2f(32, 32));
     sprite->loadTexture("dog.png");
