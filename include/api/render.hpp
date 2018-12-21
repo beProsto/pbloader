@@ -14,6 +14,7 @@
 #include <engine/sprite/sprite.hpp>
 #include <detours/detours.h>
 #include <hooks/typedefs.hpp>
+#include <logger.hpp>
 
 typedef std::vector<Sprite*> TVectorSprite;
 

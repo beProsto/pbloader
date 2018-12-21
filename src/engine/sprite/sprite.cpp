@@ -16,6 +16,7 @@ Sprite::~Sprite() {
 bool Sprite::loadTexture(const char *path) {
     SDL_Surface* surface = IMG_Load(path);
     if(surface == NULL) {
+        logError("SDL_Surface is NULL! Path not found, maybe file not exist?");
         return 1;
     }
 

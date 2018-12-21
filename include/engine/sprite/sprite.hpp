@@ -7,6 +7,7 @@
 
 #include <engine/vector/vector.hpp>
 #include <SDL2/SDL.h>
+#include <logger.hpp>
 
 class Sprite {
 private:
