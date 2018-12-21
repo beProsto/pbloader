@@ -13,6 +13,8 @@ DWORD WINAPI Main(LPVOID);
 HANDLE thread;
 bool quit;
 
+Sprite* sprite;
+
 BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason, LPVOID reserved) {
     switch(reason) {
         case DLL_PROCESS_ATTACH:
@@ -21,6 +23,8 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason, LPVOID reserved) {
 		case DLL_PROCESS_DETACH:
             Hooks::Clear();
             Internal::CloseConsole();
+            if(sprite == NULL)
+                delete sprite;
 			break;
 	}
 	return TRUE;
@@ -31,5 +35,8 @@ DWORD WINAPI Main(LPVOID) {
     if(!Hooks::Init()) {
         return FALSE;
     }
+    sprite = new Sprite(Vector2f(0, 0), Vector2f(32, 32));
+    sprite->loadTexture("dog.png");
+    Render::addSprite(sprite);
     return 0;
 }

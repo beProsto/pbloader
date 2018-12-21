@@ -16,8 +16,6 @@ MologieDetours::Detour<tUpdateTexture> *detour_UpdateTexture = NULL;
 
 int dog = 0;
 
-Sprite* sprite;
-
 bool Hooks::Init() {
     try {
         detour_CreateWindow = new MologieDetours::Detour<tCreateWindow>("SDL2.dll", "SDL_CreateWindow",
@@ -40,10 +38,6 @@ bool Hooks::Init() {
         detour_IMGLoadRW = new MologieDetours::Detour<tIMGLoadRW>("SDL2_image.dll", "IMG_Load_RW", Hooks::IMG_Load_RW);
 
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
-
-        sprite = new Sprite(Vector2f(0, 0), Vector2f(32, 32));
-        sprite->loadTexture("dog.png");
-        Render::addSprite(sprite);
     } catch(MologieDetours::DetourException& e) {
         printf("%s", e.what());
         return FALSE;
@@ -59,8 +53,6 @@ void Hooks::Clear() {
     delete detour_IMGLoadRW;
     delete detour_MixPlayMusic;
     delete detour_UpdateTexture;
-
-    delete sprite;
 }
 
 
