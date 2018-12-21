@@ -6,8 +6,8 @@
 #define PBLOADER_GLOBAL_HPP
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
-SDL_Window* gWindow = NULL;
-SDL_Renderer* gRenderer = NULL;
+TTF_Font* gFont = NULL;
 
 #endif //PBLOADER_GLOBAL_HPP

@@ -7,6 +7,7 @@
 #include <hooks/hook.hpp>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 DWORD WINAPI Main(LPVOID);
 
@@ -35,6 +36,8 @@ DWORD WINAPI Main(LPVOID) {
     if(!Hooks::Init()) {
         return FALSE;
     }
+
+
     sprite = new Sprite(Vector2f(0, 0), Vector2f(32, 32));
     sprite->loadTexture("dog.png");
     Render::addSprite(sprite);

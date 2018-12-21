@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 typedef SDL_Window *(*tCreateWindow)(const char *, int, int, int, int, Uint32); /* Maybe remove it later */
 typedef int (*tRenderPresent)(SDL_Renderer*);
@@ -20,5 +21,7 @@ typedef int (*tUpdateTexture)(SDL_Texture*, const SDL_Rect*, const void*, int);
 typedef SDL_Surface* (*tIMGLoadRW)(SDL_RWops*, int);
 
 typedef int (*tMixPlayMusic)(Mix_Music*, int);
+
+typedef TTF_Font* (*tTTFOpenFontRW)(SDL_RWops*, int, int);
 
 #endif //PBLOADER_TYPEDEFS_HPP

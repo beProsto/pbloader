@@ -10,9 +10,13 @@ MologieDetours::Detour<tRenderPresent> *detour_RenderPresent = NULL;
 MologieDetours::Detour<tUpperBlit> *detour_UpperBlit = NULL;
 MologieDetours::Detour<tUpperBlitScaled> *detour_UpperBlitScaled = NULL;
 MologieDetours::Detour<tRenderCopy> *detour_RenderCopy = NULL;
-MologieDetours::Detour<tMixPlayMusic> *detour_MixPlayMusic = NULL;
-MologieDetours::Detour<tIMGLoadRW> *detour_IMGLoadRW = NULL;
 MologieDetours::Detour<tUpdateTexture> *detour_UpdateTexture = NULL;
+
+MologieDetours::Detour<tIMGLoadRW> *detour_IMGLoadRW = NULL;
+
+MologieDetours::Detour<tMixPlayMusic> *detour_MixPlayMusic = NULL;
+
+MologieDetours::Detour<tTTFOpenFontRW> *detour_OpenFontRW = NULL;
 
 int dog = 0;
 
@@ -38,6 +42,8 @@ bool Hooks::Init() {
         detour_IMGLoadRW = new MologieDetours::Detour<tIMGLoadRW>("SDL2_image.dll", "IMG_Load_RW", Hooks::IMG_Load_RW);
 
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
+
+        detour_OpenFontRW = new MologieDetours::Detour<tTTFOpenFontRW>("SDL2_ttf.dll", "TTF_OpenFontRW", Hooks::TTF_OpenFontRW);
     } catch(MologieDetours::DetourException& e) {
         printf("%s", e.what());
         return FALSE;
@@ -115,4 +121,10 @@ int Hooks::Mix_PlayMusic(Mix_Music* music, int loops) {
     changed_music = Mix_LoadMUS("downpour.wav");
     return detour_MixPlayMusic->GetOriginalFunction()(changed_music, loops);
     //return -1;
+}
+
+
+TTF_Font* Hooks::TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize) {
+    TTF_Font* font = detour_OpenFontRW->GetOriginalFunction()(src, freesrc, ptsize);
+    return font;
 }

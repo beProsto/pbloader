@@ -30,8 +30,11 @@ namespace Hooks {
     /* SDL_image */
     SDL_Surface* IMG_Load_RW(SDL_RWops* src, int freesrc);
 
-    /* SDL_Mixer */
+    /* SDL_mixer */
     int Mix_PlayMusic(Mix_Music* music, int loops);
+
+    /* SDL_ttf */
+    TTF_Font* TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize);
 }
 
 #endif //PBLOADER_HOOK_HPP
