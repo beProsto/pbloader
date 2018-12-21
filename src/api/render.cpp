@@ -20,7 +20,7 @@ void Render::clear() {
 
 void Render::render(MologieDetours::Detour<tUpdateTexture>* detour_UpdateTexture, SDL_Texture* texture) {
     for(int i = 0; i<sprites.size(); i++) {
-        if(sprites[i]->getTexture() != NULL) {
+        if(sprites[i]->getTexture()) {
             SDL_Rect rect;
             rect.x = sprites[i]->getPosition().x;
             rect.y = sprites[i]->getPosition().y;
