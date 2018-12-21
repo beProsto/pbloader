@@ -16,13 +16,7 @@ MologieDetours::Detour<tUpdateTexture> *detour_UpdateTexture = NULL;
 
 int dog = 0;
 
-SDL_Surface* gSurface = NULL;
-
 Sprite* sprite;
-
-SDL_Surface* gSurface = NULL;
-
-//Sprite* sprite;
 
 bool Hooks::Init() {
     try {
@@ -90,9 +84,6 @@ int Hooks::SDL_UpperBlit(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Surface*
     SDL_SaveBMP(dst, name.c_str());
     dog += 1;
      */
-    if(gSurface == NULL) {
-        gSurface = dst;
-    }
     return detour_UpperBlit->GetOriginalFunction()(src, srcrect, dst, dstrect);
 }
 
