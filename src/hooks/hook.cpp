@@ -45,6 +45,8 @@ bool Hooks::Init() {
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
 
         detour_OpenFontRW = new MologieDetours::Detour<tTTFOpenFontRW>("SDL2_ttf.dll", "TTF_OpenFontRW", Hooks::TTF_OpenFontRW);
+
+        //detour_fopen = new MologieDetours::Detour<tfopen>("msvcrt.dll", "fopen", Hooks::fopen);
     } catch(MologieDetours::DetourException& e) {
         logError("%s", e.what());
         return FALSE;
@@ -69,7 +71,7 @@ SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int 
 }
 
 int Hooks::SDL_RenderPresent(SDL_Renderer *renderer) {
-    logInfo("[Hooks] SDL_RenderPresent");
+    //logInfo("[Hooks] SDL_RenderPresent");
 
     //Render::render(renderer);
     return detour_RenderPresent->GetOriginalFunction()(renderer);
@@ -92,13 +94,13 @@ int Hooks::SDL_UpperBlitScaled(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Su
 }
 
 int Hooks::SDL_RenderCopy(SDL_Renderer* renderer, SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect) {
-    logInfo("[Hooks] SDL_RenderCopy");
+    //logInfo("[Hooks] SDL_RenderCopy");
     //dog = 0;
     return detour_RenderCopy->GetOriginalFunction()(renderer, texture, srcrect, dstrect);
 }
 
 int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const void* pixels, int pitch) {
-    logInfo("[Hooks] SDL_UpdateTexture"); //if your app fuck up here put dog.png next to pb
+    //logInfo("[Hooks] SDL_UpdateTexture"); //if your app fuck up here put dog.png next to pb
     int returned_value = detour_UpdateTexture->GetOriginalFunction()(texture, rect, pixels, pitch);
     Render::render(detour_UpdateTexture, texture);
     return returned_value;
@@ -107,17 +109,17 @@ int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const v
 SDL_Surface* Hooks::IMG_Load_RW(SDL_RWops* src, int freesrc) {
     /*
     logInfo("[PBLoader][Hooks] IMG_Load_RW");
+    */
     SDL_Surface* surface = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
     std::string name = "GRAPH/" + std::to_string(dog) + ".bmp";
     SDL_SaveBMP(surface, name.c_str());
     dog += 1;
-    */
-    return detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
+    return surface;
 }
 
 
 int Hooks::Mix_PlayMusic(Mix_Music* music, int loops) {
-    logInfo("[Hooks] Mix_PlayMusic\n");
+    //logInfo("[Hooks] Mix_PlayMusic\n");
     Mix_Music* changed_music = NULL;
     changed_music = Mix_LoadMUS("downpour.wav");
     return detour_MixPlayMusic->GetOriginalFunction()(changed_music, loops);

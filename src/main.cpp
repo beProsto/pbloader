@@ -5,8 +5,8 @@
 #include <internal.hpp>
 #include <detours/detours.h>
 #include <hooks/hook.hpp>
-
 #include <logger.hpp>
+#include <engine/player/player.hpp>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -45,6 +45,6 @@ DWORD WINAPI Main(LPVOID) {
 
     sprite = new Sprite(Vector2f(0, 0), Vector2f(32, 32));
     sprite->loadTexture("dog.png");
-    Render::addSprite(sprite);
+    //Render::addSprite(sprite);
     return 0;
 }

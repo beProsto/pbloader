@@ -23,23 +23,21 @@ void API::SetYLoc(int val) {
 ////////////////////////////////////////////////////////////////////////////////
 
 float API::GetXPos() {
-	float* ptr = (float*)0x005411E0;
-	return floor(*ptr);
+	Vector2f vec = Player::getPosition();
+	return floor(vec.x);
 }
 
 float API::GetYPos() {
-	float* ptr = (float*)0x005411E4;
-	return floor(*ptr);
+	Vector2f vec = Player::getPosition();
+	return floor(vec.y);
 }
 
 void API::SetXPos(float val) {
-	float* ptr = (float*)0x005411E0;
-	*ptr = val;
+	Player::move(val, 0);
 }
 
 void API::SetYPos(float val) {
-	float* ptr = (float*)0x005411E4;
-	*ptr = val;
+	Player::move(0, val);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -57,13 +55,11 @@ void API::Respawn() {
 ////////////////////////////////////////////////////////////////////////////////
 
 int API::GetDeathCount() {
-	int* ptr = (int*)0x005410F8;
-	return *ptr;
+	return Player::getDeathCount();
 }
 
 void API::SetDeathCount(int val) {
-	int* ptr = (int*)0x005410F8;
-	*ptr = val;
+	Player::setDeathCount(val);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

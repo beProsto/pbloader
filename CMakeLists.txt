@@ -21,7 +21,8 @@ add_library(pbloader SHARED ${source}/main.cpp
                             ${source}/hooks/hook.cpp
                             ${source}/hde32/hde32.cpp
                             ${source}/api/render.cpp
-                            ${source}/engine/sprite/sprite.cpp)
+                            ${source}/engine/sprite/sprite.cpp
+                            ${source}/engine/player/player.cpp)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 target_link_libraries(pbloader SDL2 SDL2_image SDL2_mixer)

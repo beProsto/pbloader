@@ -3,14 +3,32 @@
 #include <iostream>
 #include <windows.h>
 
+/*
+PSEUDO-CZAT:
+szkoda że nie mam nawet skonfigurowanego debuggera
+TODO: wyjebać PSEUDO-CZAT
+*/
+
 #ifndef LOGGER_OFF
-#define logInfo(x...)  setConsoleColor(15);_logger_raw("[INFO]" , x, " at", __FILE__ , "\b:", __LINE__);setConsoleColor(15)
-#define logError(x...) setConsoleColor(12);_logger_raw("[ERROR]", x, " at", __FILE__ , "\b:", __LINE__);setConsoleColor(15)
-#define logWarn(x...)  setConsoleColor(14);_logger_raw("[WARN]" , x, " at", __FILE__ , "\b:", __LINE__);setConsoleColor(15)
+
+    #ifndef LOGGER_OFF_INFO
+        #define logInfo(x...)  setConsoleColor(15);_logger_raw("[INFO]" , x, " at", __FILE__ , "\b:", __LINE__);setConsoleColor(15)
+    #endif
+
+    #ifndef LOGGER_OFF_ERROR
+        #define logError(x...) setConsoleColor(12);_logger_raw("[ERROR]", x, " at", __FILE__ , "\b:", __LINE__);setConsoleColor(15)
+    #endif
+
+    #ifndef LOGGER_OFF_WARN
+        #define logWarn(x...)  setConsoleColor(14);_logger_raw("[WARN]" , x, " at", __FILE__ , "\b:", __LINE__);setConsoleColor(15)
+    #endif
+
 #else
-#define logInfo(x...);
-#define logError(x...);
-#define logWarn(x...);
+
+    #define logInfo(x...);
+    #define logError(x...);
+    #define logWarn(x...);
+
 #endif
 
 static void setConsoleColor(unsigned char a) {

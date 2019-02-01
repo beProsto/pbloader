@@ -6,13 +6,16 @@
 #define PBLOADER_FONT_HPP
 
 #include <SDL2/SDL_ttf.h>
+#include <string>
 
 class Font {
 private:
     TTF_Font* font;
+    std::string path;
 public:
-    Font();
+    Font(const std::string& path);
     Font(const Font& other);
+    ~Font();
 };
 
 #endif //PBLOADER_FONT_HPP

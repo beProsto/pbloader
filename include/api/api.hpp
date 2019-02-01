@@ -8,6 +8,7 @@
 #include <fcntl.h>
 
 #include <internal.hpp>
+#include <engine/player/player.hpp>
 
 #define MAP_WIDTH  32
 #define MAP_HEIGHT 18
