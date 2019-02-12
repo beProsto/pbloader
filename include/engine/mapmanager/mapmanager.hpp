@@ -5,7 +5,7 @@ class MapManager {
 private:
     MapManager() { }
 public:
-    static void placeBlock();
+    
 };
 
 #endif

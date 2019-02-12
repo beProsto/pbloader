@@ -6,6 +6,7 @@
 // NOx - Nothing X
 
 enum Blocks {
+    AIR,
     STONE_BRICK,
     STONE_BRICK_LEFT,
     STONE_BRICK_RIGHT,
