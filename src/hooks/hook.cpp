@@ -44,8 +44,10 @@ bool Hooks::Init() {
 
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
 
+        /*
         detour_OpenFontRW = new MologieDetours::Detour<tTTFOpenFontRW>("SDL2_ttf.dll", "TTF_OpenFontRW", Hooks::TTF_OpenFontRW);
 
+        */
         //detour_fopen = new MologieDetours::Detour<tfopen>("msvcrt.dll", "fopen", Hooks::fopen);
     } catch(MologieDetours::DetourException& e) {
         logError("%s", e.what());
@@ -66,14 +68,12 @@ void Hooks::Clear() {
 
 
 SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) {
-    SDL_Window* window = detour_CreateWindow->GetOriginalFunction()(title, x, y, w, h, flags);
+    SDL_Window* window = detour_CreateWindow->GetOriginalFunction()("Perypetie Piżmona", x, y, w, h, flags);
     return window;
 }
 
 int Hooks::SDL_RenderPresent(SDL_Renderer *renderer) {
-    //logInfo("[Hooks] SDL_RenderPresent");
-
-    //Render::render(renderer);
+    GameManager::Render();
     return detour_RenderPresent->GetOriginalFunction()(renderer);
 }
 
@@ -110,11 +110,29 @@ SDL_Surface* Hooks::IMG_Load_RW(SDL_RWops* src, int freesrc) {
     /*
     logInfo("[PBLoader][Hooks] IMG_Load_RW");
     */
-    SDL_Surface* surface = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
-    std::string name = "GRAPH/" + std::to_string(dog) + ".bmp";
-    SDL_SaveBMP(surface, name.c_str());
-    dog += 1;
-    return surface;
+    SDL_Surface* original_surface = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
+    SDL_Surface* surface = detour_IMGLoadRW->GetOriginalFunction()(SDL_RWFromFile("musket.png", "rb"), freesrc);
+
+    SDL_Surface* dog = SDL_CreateRGBSurface(0, original_surface->w, original_surface->h, surface->format->BitsPerPixel, surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
+
+    SDL_BlendMode oldBlendMode;
+    SDL_GetSurfaceBlendMode(surface, &oldBlendMode);
+
+    SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_NONE);
+
+    SDL_Rect aha;
+    aha.x = 0;
+    aha.y = 0;
+    aha.w = original_surface->w;
+    aha.h = original_surface->h;
+    detour_UpperBlitScaled->GetOriginalFunction()(surface, NULL, dog, &aha);
+
+    SDL_SetSurfaceBlendMode(surface, oldBlendMode);
+
+    //std::string name = "GRAPH/" + std::to_string(dog) + ".bmp";
+    //SDL_SaveBMP(surface, name.c_str());
+    //dog += 1;
+    return dog;
 }
 
 

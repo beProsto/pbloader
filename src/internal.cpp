@@ -20,6 +20,7 @@ void Internal::OpenConsole() {
 	*stdin = *hf_in;
 }
 
+/* This fucking function crashes */
 void Internal::CloseConsole() {
 	FreeConsole();
 

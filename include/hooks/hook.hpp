@@ -5,13 +5,12 @@
 #ifndef PBLOADER_HOOK_HPP
 #define PBLOADER_HOOK_HPP
 
-#include <detours/detours.h>
-#include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
-#include <api/render.hpp>
 
+#include <api/render.hpp>
 #include "typedefs.hpp"
+#include <engine/gamemanager/gamemanager.hpp>
 
 namespace Hooks {
     bool Init();
