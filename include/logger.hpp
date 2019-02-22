@@ -3,12 +3,6 @@
 #include <iostream>
 #include <windows.h>
 
-/*
-PSEUDO-CZAT:
-szkoda że nie mam nawet skonfigurowanego debuggera
-TODO: wyjebać PSEUDO-CZAT
-*/
-
 #ifndef LOGGER_OFF
 
     #ifndef LOGGER_OFF_INFO
