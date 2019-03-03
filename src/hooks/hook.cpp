@@ -21,6 +21,8 @@ MologieDetours::Detour<tTTFOpenFontRW> *detour_OpenFontRW = NULL;
 
 int dog = 0;
 
+auto surfacemanager = GameManager::GetSurfaceManager();
+
 bool Hooks::Init() {
     try {
         detour_CreateWindow = new MologieDetours::Detour<tCreateWindow>("SDL2.dll", "SDL_CreateWindow",
@@ -74,6 +76,7 @@ SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int 
 
 int Hooks::SDL_RenderPresent(SDL_Renderer *renderer) {
     GameManager::Render();
+    logInfo("[SurfaceManager] Liczba tekstur: " + std::to_string(surfacemanager->Size()));
     return detour_RenderPresent->GetOriginalFunction()(renderer);
 }
 
@@ -107,32 +110,10 @@ int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const v
 }
 
 SDL_Surface* Hooks::IMG_Load_RW(SDL_RWops* src, int freesrc) {
-    /*
-    logInfo("[PBLoader][Hooks] IMG_Load_RW");
-    */
-    SDL_Surface* original_surface = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
-    SDL_Surface* surface = detour_IMGLoadRW->GetOriginalFunction()(SDL_RWFromFile("musket.png", "rb"), freesrc);
-
-    SDL_Surface* dog = SDL_CreateRGBSurface(0, original_surface->w, original_surface->h, surface->format->BitsPerPixel, surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
-
-    SDL_BlendMode oldBlendMode;
-    SDL_GetSurfaceBlendMode(surface, &oldBlendMode);
-
-    SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_NONE);
-
-    SDL_Rect aha;
-    aha.x = 0;
-    aha.y = 0;
-    aha.w = original_surface->w;
-    aha.h = original_surface->h;
-    detour_UpperBlitScaled->GetOriginalFunction()(surface, NULL, dog, &aha);
-
-    SDL_SetSurfaceBlendMode(surface, oldBlendMode);
-
-    //std::string name = "GRAPH/" + std::to_string(dog) + ".bmp";
-    //SDL_SaveBMP(surface, name.c_str());
-    //dog += 1;
-    return dog;
+    SDL_Surface* result = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
+    surfacemanager->Add(std::to_string(dog), result);
+    dog += 1;
+    return result;
 }
 
 

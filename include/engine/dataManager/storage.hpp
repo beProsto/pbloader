@@ -21,17 +21,19 @@ namespace res {
 
 		//enter the arguments to the constructor after the key (if none, leave only the key)
 		template<typename ... Args>
-		inline void add(const std::string& key, const Args&...);
+		inline void Add(const std::string& key, const Args&...);
 
-		inline void remove(const std::string& key);
+		inline void Remove(const std::string& key);
 
-		inline void clear();
+		inline void Clear();
+
+		inline int Size();
 
 		// returns the last item if the key does not match to anything
-		T& get(const std::string& n);
+		T Get(const std::string& n);
 
 		// will create a new item if the key does not match to anything
-		T& operator[](const std::string& n);
+		T operator[](const std::string& n);
 
 	};
 

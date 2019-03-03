@@ -6,25 +6,25 @@ namespace res {
 
 	template<class T>
 	template<typename ... Args>
-	inline void Storage<T>::add(const std::string& key, const Args&... args)
+	inline void Storage<T>::Add(const std::string& key, const Args&... args)
 	{
 		items.emplace(std::make_pair(key, args...));
 	}
 
 	template<class T>
-	inline void Storage<T>::remove(const std::string& key)
+	inline void Storage<T>::Remove(const std::string& key)
 	{
 		items.erase(key);
 	}
 
 	template<class T>
-	inline void Storage<T>::clear()
+	inline void Storage<T>::Clear()
 	{
 		items.clear();
 	}
 
 	template<class T>
-	T& Storage<T>::get(const std::string& n) 
+	T Storage<T>::Get(const std::string& n) 
 	{
 		try
 		{	
@@ -33,14 +33,20 @@ namespace res {
 		catch( const std::exception& e )
 		{
 			//logError(e.what());
-			return items.begin();
+			SDL_Surface* result = items.begin()->second;
+			return result;
 		}
 	}
 
 	template<class T>
-	T& Storage<T>::operator[](const std::string& n)
+	int Storage<T>::Size() {
+		return items.size();
+	}
+
+	template<class T>
+	T Storage<T>::operator[](const std::string& n)
 	{
-		return items.at(n);
+		return *items.at(n);
 	}
 
 

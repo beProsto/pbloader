@@ -2,14 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project("PBLoader")
 
-#set (CMAKE_GENERATOR "MSYS Makefiles" CACHE INTERNAL "" FORCE)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-
-#set(CMAKE_EXE_LINKER_FLAGS "")
-#set(CMAKE_C_FLAGS "")
-#set(CMAKE_CXX_FLAGS "")
 
 set(source ${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/include)
