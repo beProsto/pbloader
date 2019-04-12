@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include <logger.hpp>
 
@@ -11,6 +12,9 @@
 #include <detours/detours.h>
 
 #include <engine/datamanager/datamanager.hpp>
+#include <engine/player/player.hpp>
+
+extern MologieDetours::Detour<taha> *detour_aha;
 
 class GameManager {
 private:
@@ -18,7 +22,7 @@ private:
 public:
     static SurfaceManager* surfacemanager;
 
-    static void Init() {  }
+    static void Init();
     static void HandleEvents();
     static void Render();
 

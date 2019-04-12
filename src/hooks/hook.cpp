@@ -19,14 +19,18 @@ MologieDetours::Detour<tMixPlayMusic> *detour_MixPlayMusic = NULL;
 
 MologieDetours::Detour<tTTFOpenFontRW> *detour_OpenFontRW = NULL;
 
+MologieDetours::Detour<tfopen> *detour_fopen = NULL;
+
+MologieDetours::Detour<taha> *detour_aha = NULL;
+
 int dog = 0;
 
 auto surfacemanager = GameManager::GetSurfaceManager();
 
 bool Hooks::Init() {
     try {
-        detour_CreateWindow = new MologieDetours::Detour<tCreateWindow>("SDL2.dll", "SDL_CreateWindow",
-                                                                        Hooks::SDL_CreateWindow);
+        detour_CreateWindow = new MologieDetours::Detour<tCreateWindow>(/*"SDL2.dll", "SDL_CreateWindow",
+                                                                        Hooks::SDL_CreateWindow*/(tCreateWindow)0x0045DB78, Hooks::SDL_CreateWindow);
 
         detour_RenderPresent = new MologieDetours::Detour<tRenderPresent>("SDL2.dll", "SDL_RenderPresent",
                                                                           Hooks::SDL_RenderPresent);
@@ -46,11 +50,12 @@ bool Hooks::Init() {
 
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
 
-        /*
-        detour_OpenFontRW = new MologieDetours::Detour<tTTFOpenFontRW>("SDL2_ttf.dll", "TTF_OpenFontRW", Hooks::TTF_OpenFontRW);
+        detour_fopen = new MologieDetours::Detour<tfopen>("msvcrt.dll", "fopen", Hooks::fopen);
 
-        */
-        //detour_fopen = new MologieDetours::Detour<tfopen>("msvcrt.dll", "fopen", Hooks::fopen);
+        /* Kiedy zaczniesz grać, ta funkcja jest ciągle używana, możliwe że to operator= lub konstruktor, ale czego? */
+        //detour_aha = new MologieDetours::Detour<taha>((taha)0x004038d0, Hooks::aha);
+
+        detour_aha = new MologieDetours::Detour<taha>((taha)0x00427280, Hooks::aha);
     } catch(MologieDetours::DetourException& e) {
         logError("%s", e.what());
         return FALSE;
@@ -66,8 +71,8 @@ void Hooks::Clear() {
     delete detour_IMGLoadRW;
     delete detour_MixPlayMusic;
     delete detour_UpdateTexture;
+    delete detour_fopen;
 }
-
 
 SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) {
     SDL_Window* window = detour_CreateWindow->GetOriginalFunction()("Perypetie Piżmona", x, y, w, h, flags);
@@ -76,7 +81,7 @@ SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int 
 
 int Hooks::SDL_RenderPresent(SDL_Renderer *renderer) {
     GameManager::Render();
-    logInfo("[SurfaceManager] Liczba tekstur: " + std::to_string(surfacemanager->Size()));
+    //logInfo("[SurfaceManager] Liczba tekstur: " + std::to_string(surfacemanager->Size()));
     return detour_RenderPresent->GetOriginalFunction()(renderer);
 }
 
@@ -110,10 +115,10 @@ int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const v
 }
 
 SDL_Surface* Hooks::IMG_Load_RW(SDL_RWops* src, int freesrc) {
-    SDL_Surface* result = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
-    surfacemanager->Add(std::to_string(dog), result);
+    SDL_Surface* original_surface = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
+    surfacemanager->Add(std::to_string(dog), original_surface);
     dog += 1;
-    return result;
+    return original_surface;
 }
 
 
@@ -129,4 +134,18 @@ int Hooks::Mix_PlayMusic(Mix_Music* music, int loops) {
 TTF_Font* Hooks::TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize) {
     TTF_Font* font = detour_OpenFontRW->GetOriginalFunction()(src, freesrc, ptsize);
     return font;
+}
+
+
+FILE* Hooks::fopen(const char* filename, const char* mode) {
+    FILE* file = detour_fopen->GetOriginalFunction()(filename, mode);
+    std::cout << filename << " " << file << std::endl;
+    return file;
+}
+
+
+void Hooks::aha() {
+    logInfo("Hooks::aha is used!");
+    detour_aha->GetOriginalFunction()();
+    return;
 }

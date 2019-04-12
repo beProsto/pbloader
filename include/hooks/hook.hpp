@@ -34,6 +34,10 @@ namespace Hooks {
 
     /* SDL_ttf */
     TTF_Font* TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize);
+
+    FILE* fopen(const char* filename, const char* mode);
+
+    void aha();
 }
 
 #endif //PBLOADER_HOOK_HPP

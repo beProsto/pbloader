@@ -21,5 +21,10 @@ add_library(pbloader SHARED ${source}/main.cpp
                             ${source}/engine/mapmanager/location.cpp
                             ${source}/engine/gamemanager/gamemanager.cpp)
 
+IF(CMAKE_COMPILER_IS_GNUCC)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+ENDIF(CMAKE_COMPILER_IS_GNUCC)
+
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 target_link_libraries(pbloader SDL2 SDL2_image SDL2_mixer)

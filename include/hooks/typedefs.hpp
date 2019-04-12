@@ -26,4 +26,8 @@ typedef int (*tMixPlayMusic)(Mix_Music*, int);
 
 typedef TTF_Font* (*tTTFOpenFontRW)(SDL_RWops*, int, int);
 
+typedef FILE* (*tfopen)(const char*, const char*);
+
+typedef void (*taha)();
+
 #endif //PBLOADER_TYPEDEFS_HPP
