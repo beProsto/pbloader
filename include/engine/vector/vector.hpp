@@ -29,7 +29,7 @@ public:
     Vector2& operator -=(const Vector2& v) { x -= v.x; y -= v.y; return *this; }
     Vector2& operator *=(const Vector2& v) { x *= v.x; y *= v.y; return *this; }
     Vector2& operator /=(const Vector2& v) { x /= v.x; y /= v.y; return *this; }
-
+        
     bool operator ==(const Vector2& v) const {
         if(x == v.x && y == v.y)
             return true;
@@ -66,6 +66,73 @@ public:
     }
     bool operator >=(const Vector2& v) const {
         if(x >= v.x && y >= v.y)
+            return true;
+        else
+            return false;
+    }
+    
+    // i'm writing this with githubs' editor, so there can be some problems xd
+    template <typename X>
+    Vector2 operator +(const X& v) const { return Vector2(x + v, y + v); }
+    template <typename X>
+    Vector2 operator -(const X& v) const { return Vector2(x - v, y - v); }
+    template <typename X>
+    Vector2 operator *(const X& v) const { return Vector2(x * v, y * v); }
+    template <typename X>
+    Vector2 operator /(const X& v) const { return Vector2(x / v, y / v); }
+
+    template <typename X>
+    Vector2& operator =(const X& v) { x = v; y = v; return *this; }
+
+    template <typename X>
+    Vector2& operator +=(const X& v) { x += v; y += v; return *this; }
+    template <typename X>
+    Vector2& operator -=(const X& v) { x -= v; y -= v; return *this; }
+    template <typename X>
+    Vector2& operator *=(const X& v) { x *= v; y *= v; return *this; }
+    template <typename X>
+    Vector2& operator /=(const X& v) { x /= v; y /= v; return *this; }
+    
+    template <typename X>
+    bool operator ==(const X& v) const {
+        if(x == v && y == v)
+            return true;
+        else
+            return false;
+    }
+    template <typename X>
+    bool operator !=(const X& v) const {
+        if(x != v && y != v)
+            return true;
+        else
+            return false;
+    }
+
+    template <typename X>
+    bool operator <(const X& v) const{
+        if(x < v && y < v)
+            return true;
+        else
+            return false;
+    }
+    template <typename X>
+    bool operator >(const X& v) const {
+        if(x > v && y > v)
+            return true;
+        else
+            return false;
+    }
+
+    template <typename X>
+    bool operator <=(const X& v) const {
+        if(x <= v && y <= v)
+            return true;
+        else
+            return false;
+    }
+    template <typename X>
+    bool operator >=(const X& v) const {
+        if(x >= v && y >= v)
             return true;
         else
             return false;
